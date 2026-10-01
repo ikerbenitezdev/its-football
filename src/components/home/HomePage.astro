@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import ContactForm from '../contact/ContactForm.astro';
+import Faq from './Faq.astro';
+import ServiceCard from './ServiceCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath, t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const serviceRoutes = [
+  { number: '01', route: 'stages', title: 'stagesTitle', description: 'stagesDescription' },
+  { number: '02', route: 'coaches', title: 'coachesTitle', description: 'coachesDescription' },
+  { number: '03', route: 'matches', title: 'matchesTitle', description: 'matchesDescription' },
+  { number: '04', route: 'tournaments', title: 'tournamentsTitle', description: 'tournamentsDescription' },
+  { number: '05', route: 'teams', title: 'teamsTitle', description: 'teamsDescription' },
+] as const;
+const faqItems = [
+  { question: t(locale, 'faqOneQuestion'), answer: t(locale, 'faqOneAnswer') },
+  { question: t(locale, 'faqTwoQuestion'), answer: t(locale, 'faqTwoAnswer') },
+  { question: t(locale, 'faqThreeQuestion'), answer: t(locale, 'faqThreeAnswer') },
+  { question: t(locale, 'faqFourQuestion'), answer: t(locale, 'faqFourAnswer') },
+];
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+const heroImage = '/images/stage-al-qadisyiah.webp';
+---
+
+<Layout
+  title={t(locale, 'homeTitle')}
+  description={t(locale, 'homeDescription')}
+  locale={locale}
+  route="home"
+  structuredData={[faqSchema]}
+>
+  <section class="home-hero page-shell" aria-labelledby="home-heading">
+    <div class="hero-copy">
+      <p class="hero-eyebrow"><span></span>{t(locale, 'heroEyebrow')}</p>
+      <h1 id="home-heading">{t(locale, 'homeHeading')}</h1>
+      <p class="hero-answer">{t(locale, 'homeIntro')}</p>
+      <a class="hero-cta" href="#pathways">{t(locale, 'heroCta')}<span aria-hidden="true"> ↘</span></a>
+      <div class="hero-proof" aria-label={locale === 'es' ? 'Dos idiomas, cinco servicios' : 'Two languages, five services'}>
+        <p><strong>05</strong><span>{t(locale, 'pathwaysLabel')}</span></p>
+        <span class="proof-divider" aria-hidden="true"></span>
+        <p><strong>02</strong><span>EN / ES</span></p>
+      </div>
+    </div>
+    <figure class="hero-visual hero-parallax">
+      <Image
+        src={heroImage}
+        alt={t(locale, 'heroImageAlt')}
+        width={1200}
+        height={1500}
+        widths={[640, 960, 1200]}
+        sizes="(max-width: 54rem) 100vw, 48vw"
+        format="webp"
+        quality={82}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption><span>IT'S FOOTBALL</span><span>PLAY · LEARN · CONNECT</span></figcaption>
+    </figure>
+    <a class="hero-scroll" href="#pathways" aria-label={locale === 'es' ? 'Desplazarse a los programas' : 'Scroll to programmes'}>
+      <span aria-hidden="true">↓</span>
+    </a>
+  </section>
+
+  <section class="pathways-section" id="pathways" aria-labelledby="pathways-heading">
+    <div class="page-shell">
+      <div class="section-heading reveal">
+        <div>
+          <p class="section-kicker">{t(locale, 'pathwaysLabel')}</p>
+          <h2 id="pathways-heading">{t(locale, 'pathwaysTitle')}</h2>
+        </div>
+        <p>{t(locale, 'pathwaysIntro')}</p>
+      </div>
+      <div class="service-grid">
+        {serviceRoutes.map(({ number, route, title, description }) => (
+          <ServiceCard
+            number={number}
+            title={t(locale, title)}
+            description={t(locale, description)}
+            href={getLocalizedPath(route, locale)}
+            label={t(locale, 'learnMore')}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="approach-section page-shell" aria-labelledby="approach-heading">
+    <div class="approach-intro reveal">
+      <p class="section-kicker">{t(locale, 'approachLabel')}</p>
+      <h2 id="approach-heading">{t(locale, 'approachTitle')}</h2>
+      <p>{t(locale, 'approachIntro')}</p>
+    </div>
+    <ol class="approach-steps">
+      <li class="reveal"><span>01</span><div><h3>{t(locale, 'approachLearnTitle')}</h3><p>{t(locale, 'approachLearnText')}</p></div></li>
+      <li class="reveal"><span>02</span><div><h3>{t(locale, 'approachPlayTitle')}</h3><p>{t(locale, 'approachPlayText')}</p></div></li>
+      <li class="reveal"><span>03</span><div><h3>{t(locale, 'approachConnectTitle')}</h3><p>{t(locale, 'approachConnectText')}</p></div></li>
+    </ol>
+  </section>
+
+  <Faq title={t(locale, 'faqTitle')} items={faqItems} />
+
+  <section class="contact-section" id="contact" aria-labelledby="contact-heading">
+    <div class="contact-inner page-shell">
+      <div class="contact-copy reveal">
+        <p class="section-kicker">{t(locale, 'ctaBook')}</p>
+        <h2 id="contact-heading">{t(locale, 'contactTitle')}</h2>
+        <p>{t(locale, 'contactIntro')}</p>
+      </div>
+      <ContactForm locale={locale} />
+    </div>
+  </section>
+</Layout>

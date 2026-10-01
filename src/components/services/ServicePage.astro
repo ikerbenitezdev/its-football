@@ -1,0 +1,111 @@
+---
+import Faq from '../home/Faq.astro';
+import Layout from '../../layouts/Layout.astro';
+import { getLocalizedPath, t, type Locale } from '../../i18n';
+import { getServiceContent, serviceContent, type ServiceKey } from '../../content/services';
+
+interface Props {
+  locale: Locale;
+  service: ServiceKey;
+}
+
+const { locale, service } = Astro.props;
+const content = getServiceContent(locale, service);
+const relatedServices: Record<ServiceKey, ServiceKey[]> = {
+  stages: ['coaches', 'matches', 'teams'],
+  coaches: ['stages', 'teams', 'tournaments'],
+  matches: ['stages', 'tournaments', 'teams'],
+  tournaments: ['matches', 'teams', 'stages'],
+  teams: ['stages', 'matches', 'coaches'],
+};
+const otherServices = relatedServices[service];
+const siteUrl = Astro.site ?? new URL('https://itsfootball.example');
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': `${new URL(getLocalizedPath(service, locale), siteUrl).href}#service`,
+  name: content.title,
+  description: content.metaDescription,
+  serviceType: content.title,
+  url: new URL(getLocalizedPath(service, locale), siteUrl).href,
+  provider: { '@id': `${siteUrl.href}#organization` },
+  areaServed: 'Worldwide',
+  inLanguage: locale,
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: content.faqs.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+const homePath = getLocalizedPath('home', locale);
+---
+
+<Layout
+  title={content.metaTitle}
+  description={content.metaDescription}
+  locale={locale}
+  route={service}
+  breadcrumbs={[{ name: content.title, route: service }]}
+  structuredData={[serviceSchema, faqSchema]}
+>
+  <div class="page-shell service-page">
+    <nav class="breadcrumbs" aria-label={locale === 'es' ? 'Ruta de navegación' : 'Breadcrumb'}>
+      <ol>
+        <li><a href={homePath}>{t(locale, 'navHome')}</a></li>
+        <li aria-current="page">{content.title}</li>
+      </ol>
+    </nav>
+
+    <header class="service-intro">
+      <p class="section-kicker">{t(locale, 'navServices')}</p>
+      <h1>{content.title}</h1>
+      <p class="service-answer">{content.answer}</p>
+    </header>
+
+    <section class="service-detail" aria-labelledby="service-detail-heading">
+      <div class="service-detail-intro">
+        <p class="section-kicker">{content.title}</p>
+        <h2 id="service-detail-heading">{content.sectionTitle}</h2>
+        <p>{content.sectionIntro}</p>
+      </div>
+      <ol class="service-points">
+        {content.points.map((point, index) => (
+          <li>
+            <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <div><h3>{point.title}</h3><p>{point.description}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <Faq title={t(locale, 'faqTitle')} items={content.faqs} />
+
+    <section class="related-services" aria-labelledby="related-heading">
+      <div class="related-heading">
+        <p class="section-kicker">{t(locale, 'navServices')}</p>
+        <h2 id="related-heading">{locale === 'es' ? 'Más formas de vivir el fútbol' : 'More ways to experience football'}</h2>
+      </div>
+      <nav aria-label={locale === 'es' ? 'Servicios relacionados' : 'Related services'}>
+        {otherServices.map((related) => (
+          <a href={getLocalizedPath(related, locale)}>
+            <span>{serviceContent[locale][related].title}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </nav>
+    </section>
+
+    <section class="service-contact" aria-labelledby="service-contact-heading">
+      <div>
+        <p class="section-kicker">{t(locale, 'ctaBook')}</p>
+        <h2 id="service-contact-heading">{t(locale, 'contactTitle')}</h2>
+        <p>{t(locale, 'contactIntro')}</p>
+      </div>
+      <a class="button-primary" href={`${homePath}#contact`}>{t(locale, 'ctaBook')}</a>
+    </section>
+  </div>
+</Layout>

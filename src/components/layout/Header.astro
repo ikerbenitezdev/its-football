@@ -1,0 +1,76 @@
+---
+import { getLocalizedPath, t, type Locale, type RouteKey } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  route: RouteKey;
+}
+
+const { locale, route } = Astro.props;
+const services: { route: RouteKey; label: Parameters<typeof t>[1] }[] = [
+  { route: 'stages', label: 'navStages' },
+  { route: 'coaches', label: 'navCoaches' },
+  { route: 'matches', label: 'navMatches' },
+  { route: 'tournaments', label: 'navTournaments' },
+  { route: 'teams', label: 'navTeams' },
+];
+const homePath = getLocalizedPath('home', locale);
+const contactPath = `${homePath}#contact`;
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand-mark" href={homePath} aria-label={t(locale, 'brand')}>
+      <img class="brand-logo" src="/logo.png" width="512" height="512" alt="" decoding="async" />
+    </a>
+
+    <nav class="desktop-nav" aria-label={t(locale, 'navLabel')}>
+      <ul class="desktop-nav-list">
+        <li><a class="nav-link" href={homePath}>{t(locale, 'navHome')}</a></li>
+        <li>
+          <details class="services-menu">
+            <summary>{t(locale, 'navServices')}</summary>
+            <ul class="services-list">
+              {services.map(({ route: serviceRoute, label }) => (
+                <li><a href={getLocalizedPath(serviceRoute, locale)}>{t(locale, label)}</a></li>
+              ))}
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+
+    <nav class="language-switcher desktop-language" aria-label={t(locale, 'languageLabel')}>
+      <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+      <span class="language-divider" aria-hidden="true">/</span>
+      <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+    </nav>
+
+    <a class="button-primary desktop-cta" href={contactPath}>{t(locale, 'ctaBook')}</a>
+
+    <div class="mobile-controls">
+      <details class="mobile-menu">
+        <summary aria-label={t(locale, 'navMenu')}>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+          <span class="menu-line"></span>
+        </summary>
+        <div class="mobile-menu-panel">
+          <nav aria-label={t(locale, 'navLabel')}>
+            <a href={homePath}>{t(locale, 'navHome')}</a>
+            <span class="mobile-services-label">{t(locale, 'navServices')}</span>
+            {services.map(({ route: serviceRoute, label }) => (
+              <a href={getLocalizedPath(serviceRoute, locale)}>{t(locale, label)}</a>
+            ))}
+          </nav>
+          <nav class="mobile-language" aria-label={t(locale, 'languageLabel')}>
+            <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+            <span class="language-divider" aria-hidden="true">/</span>
+            <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+          </nav>
+          <a class="button-primary" href={contactPath}>{t(locale, 'ctaBook')}</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>

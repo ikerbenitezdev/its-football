@@ -1,0 +1,107 @@
+---
+import antonFont from '@fontsource/anton/files/anton-latin-400-normal.woff2';
+import Header from '../components/layout/Header.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import SEO from '../components/seo/SEO.astro';
+import { getLocalizedPath, t, type Locale, type RouteKey } from '../i18n';
+import '../styles/global.css';
+
+interface Breadcrumb {
+  name: string;
+  route: RouteKey;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  route: RouteKey;
+  breadcrumbs?: Breadcrumb[];
+  structuredData?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  locale,
+  route,
+  breadcrumbs = [],
+  structuredData = [],
+  noindex = false,
+} = Astro.props;
+const siteUrl = Astro.site ?? new URL('https://itsfootball.example');
+const organizationDescription =
+  locale === 'es'
+    ? "it's football es una empresa internacional de formación futbolística para jugadores, entrenadores, equipos y clubes."
+    : "it's football is an international football development company for players, coaches, teams and clubs.";
+const breadcrumbItems = [
+  { name: t(locale, 'navHome'), route: 'home' as const },
+  ...breadcrumbs,
+].map((item, index) => ({
+  '@type': 'ListItem',
+  position: index + 1,
+  name: item.name,
+  item: new URL(getLocalizedPath(item.route, locale), siteUrl).href,
+}));
+const globalStructuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SportsOrganization',
+      '@id': `${siteUrl.href}#organization`,
+      name: "it's football",
+      url: siteUrl.href,
+      description: organizationDescription,
+      logo: new URL('/favicon.svg', siteUrl).href,
+      areaServed: 'Worldwide',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'business enquiries',
+        url: new URL(`${getLocalizedPath('home', locale)}#contact`, siteUrl).href,
+        availableLanguage: ['English', 'Spanish'],
+      },
+      inLanguage: ['en', 'es'],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl.href}#website`,
+      name: "it's football",
+      url: siteUrl.href,
+      publisher: { '@id': `${siteUrl.href}#organization` },
+      inLanguage: locale,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbItems,
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={antonFont} as="font" type="font/woff2" crossorigin />
+    <SEO title={title} description={description} locale={locale} route={route} noindex={noindex} />
+    {!noindex && <JsonLd data={globalStructuredData} lang={locale} />}
+    {structuredData.map((data) => <JsonLd data={data} lang={locale} />)}
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{t(locale, 'skipToContent')}</a>
+    <Header locale={locale} route={route} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="page-shell site-footer-inner">
+        <a class="footer-brand" href={getLocalizedPath('home', locale)} aria-label={t(locale, 'brand')}>
+          <img class="footer-logo" src="/logo.png" width="512" height="512" alt="" loading="lazy" decoding="async" />
+        </a>
+        <p>{t(locale, 'footerLabel')} · © {new Date().getFullYear()} it's football</p>
+      </div>
+    </footer>
+  </body>
+</html>

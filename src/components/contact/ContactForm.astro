@@ -1,0 +1,77 @@
+---
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<form
+  class="contact-form"
+  action="/api/contact"
+  method="POST"
+  data-contact-form
+  data-network-error={t(locale, 'contactNetworkError')}
+>
+  <input type="hidden" name="locale" value={locale} />
+  <div class="form-field">
+    <label for={`contact-name-${locale}`}>{t(locale, 'contactName')}</label>
+    <input id={`contact-name-${locale}`} name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required />
+  </div>
+  <div class="form-field">
+    <label for={`contact-email-${locale}`}>{t(locale, 'contactEmail')}</label>
+    <input id={`contact-email-${locale}`} name="email" type="email" autocomplete="email" maxlength="254" required />
+  </div>
+  <div class="form-field">
+    <label for={`contact-organization-${locale}`}>{t(locale, 'contactOrganization')}</label>
+    <input id={`contact-organization-${locale}`} name="organization" type="text" autocomplete="organization" maxlength="120" />
+  </div>
+  <div class="form-field">
+    <label for={`contact-message-${locale}`}>{t(locale, 'contactMessage')}</label>
+    <textarea id={`contact-message-${locale}`} name="message" rows="5" minlength="20" maxlength="4000" required></textarea>
+  </div>
+  <div class="honeypot" aria-hidden="true">
+    <label for={`contact-website-${locale}`}>Leave this field empty</label>
+    <input id={`contact-website-${locale}`} name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <button class="button-primary contact-submit" type="submit">{t(locale, 'contactSubmit')}</button>
+  <p class="form-privacy">{t(locale, 'contactPrivacy')}</p>
+  <p class="form-feedback" data-contact-feedback role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const feedback = form?.querySelector<HTMLElement>('[data-contact-feedback]');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!feedback) return;
+
+    const submitButton = form.querySelector<HTMLButtonElement>('[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
+
+    try {
+      const body = new URLSearchParams();
+      for (const [key, value] of new FormData(form).entries()) {
+        if (typeof value === 'string') body.append(key, value);
+      }
+
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body,
+        headers: { Accept: 'application/json' },
+      });
+      const result = (await response.json()) as { ok: boolean; message: string };
+      feedback.textContent = result.message;
+      feedback.dataset.state = result.ok ? 'success' : 'error';
+      if (result.ok) form.reset();
+    } catch {
+      feedback.textContent = form.dataset.networkError ?? '';
+      feedback.dataset.state = 'error';
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+</script>

@@ -1,0 +1,28 @@
+---
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="faq-section page-shell" aria-labelledby="faq-heading">
+  <div class="faq-heading reveal">
+    <p class="section-kicker">FAQ</p>
+    <h2 id="faq-heading">{title}</h2>
+  </div>
+  <div class="faq-list">
+    {items.map(({ question, answer }) => (
+      <details class="faq-item reveal">
+        <summary>{question}</summary>
+        <p>{answer}</p>
+      </details>
+    ))}
+  </div>
+</section>

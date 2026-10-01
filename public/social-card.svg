@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#27527f"/>
+  <path d="M820 0h380v630H820z" fill="#1d4269"/>
+  <circle cx="1010" cy="314" r="170" fill="#d7ff24"/>
+  <path d="m1010 144 62 53-23 77h-78l-23-77zm-62 53-85 17-22 98 68 54 76-39 22-53m65-77 85 17 22 98-68 54-76-39m-150 2 38 92 85 38 85-38 38-92m-123-29h72m-14-63-21 63 38 54-22 94" fill="none" stroke="#142333" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"/>
+  <text x="84" y="244" fill="#d7ff24" font-family="Arial,sans-serif" font-size="28" font-weight="700" letter-spacing="3">INTERNATIONAL FOOTBALL DEVELOPMENT</text>
+  <text x="76" y="390" fill="#fff" font-family="Arial,sans-serif" font-size="106" font-weight="700">it's football</text>
+  <rect x="84" y="442" width="270" height="8" fill="#ff00ab"/>
+</svg>

@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+export const prerender = false;
+
+const isSpanish = Astro.url.pathname === '/es' || Astro.url.pathname.startsWith('/es/');
+Astro.response.status = 404;
+---
+
+<Layout
+  title={isSpanish ? 'Página no encontrada | it’s football' : 'Page not found | it’s football'}
+  description={isSpanish ? 'La página que buscas no está disponible.' : 'The page you are looking for is not available.'}
+  locale={isSpanish ? 'es' : 'en'}
+  route="home"
+  noindex={true}
+>
+  <section class="page-shell not-found-page">
+    <p class="section-kicker">404</p>
+    <h1>{isSpanish ? 'Esta página no está en juego.' : 'This page is out of play.'}</h1>
+    <p>{isSpanish ? 'La dirección puede haber cambiado o ya no estar disponible.' : 'The address may have changed or may no longer be available.'}</p>
+    <a class="button-primary" href={isSpanish ? '/es/' : '/'}>{isSpanish ? 'Volver al inicio' : 'Back to home'}</a>
+  </section>
+</Layout>
