@@ -14,7 +14,7 @@ const en = {
   languageSpanish: 'Spanish',
   ctaBook: 'Book a Call',
   footerLabel: 'International football development',
-  homeTitle: "it's football | International Football Development",
+  homeTitle: "It's football | International Football Development",
   homeDescription:
     "It's football delivers international football training experiences for players, coaches, teams and clubs.",
   homeHeading: 'Football development without borders',
@@ -48,8 +48,8 @@ const en = {
   approachConnectTitle: 'Take the experience home',
   approachConnectText: 'New football perspectives and shared moments can keep shaping a team long after the final whistle.',
   faqTitle: 'Frequently asked questions',
-  faqOneQuestion: 'What does it’s football offer?',
-  faqOneAnswer: 'It’s football organises international football stages, coach development, matches, tournaments and tailored team experiences.',
+  faqOneQuestion: 'What does It\'s football offer?',
+  faqOneAnswer: 'It\'s football organises international football stages, coach development, matches, tournaments and tailored team experiences.',
   faqTwoQuestion: 'Who can take part in a football stage?',
   faqTwoAnswer: 'Programmes are designed for football players and groups. Age, level, dates and availability depend on each stage; contact the team to discuss a suitable option.',
   faqThreeQuestion: 'Can a club plan a tailored international trip?',
@@ -63,14 +63,14 @@ const en = {
   contactOrganization: 'Club or organisation',
   contactMessage: 'How can we help?',
   contactSubmit: 'Send enquiry',
-  contactPrivacy: 'We’ll use these details only to respond to your enquiry.',
+  contactPrivacy: 'We\'ll use these details only to respond to your enquiry.',
   contactSuccess: 'Thanks for getting in touch. Your enquiry has been sent.',
   contactInvalid: 'Please check the form and provide a valid email and message.',
   contactLimited: 'Too many requests. Please wait a little before trying again.',
   contactUnavailable: 'The contact service is temporarily unavailable. Please try again later.',
   contactFailed: 'We could not send your enquiry. Please try again later.',
   contactNetworkError: 'Unable to send your enquiry right now. Please try again.',
-  contactBack: 'Return to it’s football',
+  contactBack: 'Return to It\'s football',
 } as const;
 
 export default en;

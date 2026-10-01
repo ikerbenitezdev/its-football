@@ -5,6 +5,7 @@ import Faq from './Faq.astro';
 import ServiceCard from './ServiceCard.astro';
 import Layout from '../../layouts/Layout.astro';
 import { getLocalizedPath, t, type Locale } from '../../i18n';
+import heroImage from '../../assets/images/stages/stage-al-qadisyiah-barca.webp';
 
 interface Props {
   locale: Locale;
@@ -33,7 +34,6 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: answer },
   })),
 };
-const heroImage = '/images/stage-al-qadisyiah.webp';
 ---
 
 <Layout
@@ -49,11 +49,11 @@ const heroImage = '/images/stage-al-qadisyiah.webp';
       <h1 id="home-heading">{t(locale, 'homeHeading')}</h1>
       <p class="hero-answer">{t(locale, 'homeIntro')}</p>
       <a class="hero-cta" href="#pathways">{t(locale, 'heroCta')}<span aria-hidden="true"> ↘</span></a>
-      <div class="hero-proof" aria-label={locale === 'es' ? 'Dos idiomas, cinco servicios' : 'Two languages, five services'}>
+      <!-- <div class="hero-proof" aria-label={locale === 'es' ? 'Dos idiomas, cinco servicios' : 'Two languages, five services'}>
         <p><strong>05</strong><span>{t(locale, 'pathwaysLabel')}</span></p>
         <span class="proof-divider" aria-hidden="true"></span>
         <p><strong>02</strong><span>EN / ES</span></p>
-      </div>
+      </div> -->
     </div>
     <figure class="hero-visual hero-parallax">
       <Image
@@ -70,9 +70,9 @@ const heroImage = '/images/stage-al-qadisyiah.webp';
       />
       <figcaption><span>IT'S FOOTBALL</span><span>PLAY · LEARN · CONNECT</span></figcaption>
     </figure>
-    <a class="hero-scroll" href="#pathways" aria-label={locale === 'es' ? 'Desplazarse a los programas' : 'Scroll to programmes'}>
+    <!-- <a class="hero-scroll" href="#pathways" aria-label={locale === 'es' ? 'Desplazarse a los programas' : 'Scroll to programmes'}>
       <span aria-hidden="true">↓</span>
-    </a>
+    </a> -->
   </section>
 
   <section class="pathways-section" id="pathways" aria-labelledby="pathways-heading">

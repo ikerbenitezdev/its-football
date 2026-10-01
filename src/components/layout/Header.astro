@@ -1,5 +1,6 @@
 ---
 import { getLocalizedPath, t, type Locale, type RouteKey } from '../../i18n';
+import { Dumbbell, Presentation, Swords, Trophy, UsersRound } from '@lucide/astro';
 
 interface Props {
   locale: Locale;
@@ -7,70 +8,84 @@ interface Props {
 }
 
 const { locale, route } = Astro.props;
-const services: { route: RouteKey; label: Parameters<typeof t>[1] }[] = [
-  { route: 'stages', label: 'navStages' },
-  { route: 'coaches', label: 'navCoaches' },
-  { route: 'matches', label: 'navMatches' },
-  { route: 'tournaments', label: 'navTournaments' },
-  { route: 'teams', label: 'navTeams' },
-];
+const services = [
+  { route: 'stages', label: 'navStages', description: 'stagesDescription', icon: Dumbbell },
+  { route: 'coaches', label: 'navCoaches', description: 'coachesDescription', icon: Presentation },
+  { route: 'matches', label: 'navMatches', description: 'matchesDescription', icon: Swords },
+  { route: 'tournaments', label: 'navTournaments', description: 'tournamentsDescription', icon: Trophy },
+  { route: 'teams', label: 'navTeams', description: 'teamsDescription', icon: UsersRound },
+] as const;
 const homePath = getLocalizedPath('home', locale);
 const contactPath = `${homePath}#contact`;
 ---
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand-mark" href={homePath} aria-label={t(locale, 'brand')}>
-      <img class="brand-logo" src="/logo.png" width="512" height="512" alt="" decoding="async" />
-    </a>
+    <div class="header-top-row">
+      <a class="brand-mark" href={homePath} aria-label={t(locale, 'brand')}>
+        <img class="brand-logo" src="/logo.png" width="512" height="512" alt="" decoding="async" />
+      </a>
 
-    <nav class="desktop-nav" aria-label={t(locale, 'navLabel')}>
-      <ul class="desktop-nav-list">
-        <li><a class="nav-link" href={homePath}>{t(locale, 'navHome')}</a></li>
-        <li>
-          <details class="services-menu">
-            <summary>{t(locale, 'navServices')}</summary>
-            <ul class="services-list">
+      <div class="header-top-actions">
+        <nav class="desktop-primary-nav" aria-label={t(locale, 'navLabel')}>
+          <ul class="primary-nav-list">
+            <li><a class="nav-link" href={homePath}>{t(locale, 'navHome')}</a></li>
+            <li>
+              <details class="services-dropdown">
+                <summary>{t(locale, 'navServices')}<span class="services-chevron" aria-hidden="true"></span></summary>
+                <div class="services-panel">
+                  <ul class="desktop-services-list">
+                    {services.map(({ route: serviceRoute, label, description, icon: Icon }) => (
+                      <li>
+                        <a class="service-nav-item" href={getLocalizedPath(serviceRoute, locale)} aria-current={route === serviceRoute ? 'page' : undefined}>
+                          <Icon class="service-nav-icon" size={21} stroke-width={1.8} aria-hidden="true" />
+                          <span class="service-nav-copy">
+                            <p class="text-lg font-extrabold">{t(locale, label)}</p>
+                            <p class="text-sm">{t(locale, description)}</p>
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+            </li>
+          </ul>
+        </nav>
+
+        <nav class="language-switcher desktop-language" aria-label={t(locale, 'languageLabel')}>
+          <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+          <span class="language-divider" aria-hidden="true">/</span>
+          <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+        </nav>
+
+        <a class="button-primary desktop-cta" href={contactPath}>{t(locale, 'ctaBook')}</a>
+      </div>
+
+      <div class="mobile-controls">
+        <details class="mobile-menu">
+          <summary aria-label={t(locale, 'navMenu')}>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+            <span class="menu-line"></span>
+          </summary>
+          <div class="mobile-menu-panel">
+            <nav aria-label={t(locale, 'navLabel')}>
+              <a href={homePath}>{t(locale, 'navHome')}</a>
+              <span class="mobile-services-label">{t(locale, 'navServices')}</span>
               {services.map(({ route: serviceRoute, label }) => (
-                <li><a href={getLocalizedPath(serviceRoute, locale)}>{t(locale, label)}</a></li>
+                <a href={getLocalizedPath(serviceRoute, locale)}>{t(locale, label)}</a>
               ))}
-            </ul>
-          </details>
-        </li>
-      </ul>
-    </nav>
-
-    <nav class="language-switcher desktop-language" aria-label={t(locale, 'languageLabel')}>
-      <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
-      <span class="language-divider" aria-hidden="true">/</span>
-      <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
-    </nav>
-
-    <a class="button-primary desktop-cta" href={contactPath}>{t(locale, 'ctaBook')}</a>
-
-    <div class="mobile-controls">
-      <details class="mobile-menu">
-        <summary aria-label={t(locale, 'navMenu')}>
-          <span class="menu-line"></span>
-          <span class="menu-line"></span>
-          <span class="menu-line"></span>
-        </summary>
-        <div class="mobile-menu-panel">
-          <nav aria-label={t(locale, 'navLabel')}>
-            <a href={homePath}>{t(locale, 'navHome')}</a>
-            <span class="mobile-services-label">{t(locale, 'navServices')}</span>
-            {services.map(({ route: serviceRoute, label }) => (
-              <a href={getLocalizedPath(serviceRoute, locale)}>{t(locale, label)}</a>
-            ))}
-          </nav>
-          <nav class="mobile-language" aria-label={t(locale, 'languageLabel')}>
-            <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
-            <span class="language-divider" aria-hidden="true">/</span>
-            <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
-          </nav>
-          <a class="button-primary" href={contactPath}>{t(locale, 'ctaBook')}</a>
-        </div>
-      </details>
+            </nav>
+            <nav class="mobile-language" aria-label={t(locale, 'languageLabel')}>
+              <a href={getLocalizedPath(route, 'en')} hreflang="en" lang="en" aria-current={locale === 'en' ? 'page' : undefined}>EN</a>
+              <span class="language-divider" aria-hidden="true">/</span>
+              <a href={getLocalizedPath(route, 'es')} hreflang="es" lang="es" aria-current={locale === 'es' ? 'page' : undefined}>ES</a>
+            </nav>
+            <a class="button-primary" href={contactPath}>{t(locale, 'ctaBook')}</a>
+          </div>
+        </details>
+      </div>
     </div>
   </div>
 </header>

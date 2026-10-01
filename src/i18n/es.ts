@@ -18,12 +18,12 @@ const es = {
   languageSpanish: 'Español',
   ctaBook: 'Reservar una llamada',
   footerLabel: 'Formación futbolística internacional',
-  homeTitle: "it's football | Formación futbolística internacional",
+  homeTitle: "IIt's football | Formación futbolística internacional",
   homeDescription:
-    "it's football ofrece experiencias internacionales de formación futbolística para jugadores, entrenadores, equipos y clubes.",
+    "It's football ofrece experiencias internacionales de formación futbolística para jugadores, entrenadores, equipos y clubes.",
   homeHeading: 'Formación futbolística sin fronteras',
   homeIntro:
-    "it's football es una empresa internacional de formación futbolística que ayuda a jugadores, entrenadores, equipos y clubes a crecer mediante stages, formación de entrenadores, partidos y torneos. Cada experiencia se adapta al nivel y los objetivos del grupo, combinando aprendizaje estructurado con el reto y la cultura de jugar en otro país.",
+    "It's football es una empresa internacional de formación futbolística que ayuda a jugadores, entrenadores, equipos y clubes a crecer mediante stages, formación de entrenadores, partidos y torneos. Cada experiencia se adapta al nivel y los objetivos del grupo, combinando aprendizaje estructurado con el reto y la cultura de jugar en otro país.",
   skipToContent: 'Saltar al contenido',
   heroEyebrow: 'Un deporte global. Un futuro más conectado.',
   heroImageAlt: 'Futbolistas entrenando juntos en un campo de hierba',
@@ -52,8 +52,8 @@ const es = {
   approachConnectTitle: 'Llevarse la experiencia',
   approachConnectText: 'Nuevas perspectivas futbolísticas y momentos compartidos pueden acompañar al equipo mucho después del pitido final.',
   faqTitle: 'Preguntas frecuentes',
-  faqOneQuestion: '¿Qué ofrece it’s football?',
-  faqOneAnswer: 'It’s football organiza stages internacionales, formación de entrenadores, partidos, torneos y experiencias a medida para equipos.',
+  faqOneQuestion: '¿Qué ofrece It\'s football?',
+  faqOneAnswer: 'It\'s football organiza stages internacionales, formación de entrenadores, partidos, torneos y experiencias a medida para equipos.',
   faqTwoQuestion: '¿Quién puede participar en un stage de fútbol?',
   faqTwoAnswer: 'Los programas están pensados para jugadores y grupos de fútbol. La edad, el nivel, las fechas y la disponibilidad dependen de cada stage; contacta con el equipo para encontrar una opción adecuada.',
   faqThreeQuestion: '¿Puede un club organizar un viaje internacional a medida?',
@@ -74,7 +74,7 @@ const es = {
   contactUnavailable: 'El servicio de contacto no está disponible temporalmente. Vuelve a intentarlo más tarde.',
   contactFailed: 'No hemos podido enviar tu consulta. Vuelve a intentarlo más tarde.',
   contactNetworkError: 'No se pudo enviar tu consulta. Inténtalo de nuevo.',
-  contactBack: 'Volver a it’s football',
+  contactBack: 'Volver a It\'s football',
 } satisfies Messages;
 
 export default es;
